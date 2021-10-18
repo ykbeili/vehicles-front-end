@@ -1,6 +1,7 @@
 import React, { Component } from "react";
-import logo from "./logo.svg";
 import "./App.css";
+import config from "./config.js"
+const url = config.EXPRESS_API_URL
 
 class App extends Component {
   constructor(props) {
@@ -9,8 +10,8 @@ class App extends Component {
   }
 
   callAPI() {
-    fetch(process.env.EXPRESS_API_URL + "/vehicles")
-    .then(res => res.text())
+    fetch(url + "vehicles")
+    .then(res => res.json())
     .then(res => this.setState({ apiResponse: res }))
     .catch(err => err)
   }
@@ -25,7 +26,7 @@ class App extends Component {
         <header>
           <h1>Welcome to React123</h1>
         </header>
-        <p>{this.state.apiResponse}</p>
+        {this.state.apiResponse.length > 0 ? this.state.apiResponse.map(home => <div>{home.make}</div>) : ""}
       </div>
     )
   }

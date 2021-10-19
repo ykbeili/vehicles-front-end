@@ -79,7 +79,7 @@ export default function VehicleList() {
             icon: 'edit',
             tooltip: 'Edit Vehicles',
             onClick: (event, rowData) => {
-              console.log(rowData._id, 'rowData')
+              window.location.href = `/edit-vehicle/${rowData._id}` 
             }
           },
         ]}

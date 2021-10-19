@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import config from "../config.js"
 import styled from 'styled-components'
+import { useParams } from "react-router-dom";
+
 const url = config.EXPRESS_API_URL
 
 const Button = styled.button`
@@ -27,13 +29,20 @@ border-radius: 5px;
 background-color: #f2f2f2;
 padding: 20px;
 `
-export default function AddVehicle() {
+
+export default function EditVehicle() {
   const [make, setMake] = useState('');
   const [year, setYear] = useState('');
   const [model, setModel] = useState('');
   const [price, setPrice] = useState('');
   const [status, setStatus] = useState('');
-  const addVehicle = () => {
+  const params = useParams();
+
+  useEffect(() => {
+    console.log(params, 'params')
+    fetchVehicle()
+  }, []);
+  const editVehicle = () => {
     const data = {
       make: make,
       year: year,
@@ -41,8 +50,9 @@ export default function AddVehicle() {
       price: price,
       status: status
     }
-    fetch(url + `vehicles`, { 
-      method: 'post', 
+    const id = params.id
+    fetch(url + `vehicles/` + id, { 
+      method: 'put', 
       mode: 'cors', 
       headers: {
         'Content-Type': 'application/json'
@@ -57,10 +67,39 @@ export default function AddVehicle() {
       }
     })
     .then(response => {
+      console.log(response, 'response')
       window.location.href = '/' 
     })
     .catch(err => err)
   }
+
+  const fetchVehicle = () => {
+    const id = params.id
+    fetch(url + `vehicles/${id}`, { 
+      method: 'get', 
+      mode: 'cors', 
+      headers: {
+        'Content-Type': 'application/json'
+      },
+    })
+    .then(response => { 
+      if (!response.ok) {
+        throw response
+      } else {
+        return response.json()
+      }
+    })
+    .then(response => {
+      setMake(response.data.make)
+      setModel(response.data.model)
+      setYear(response.data.year)
+      setPrice(response.data.price)
+      setStatus(response.data.status)
+      console.log(response, 'repsonse')
+    })
+    .catch(err => err)
+  }
+
   const goToVehiclesPage = () => {
     window.location.href = '/'
   }
@@ -107,7 +146,7 @@ export default function AddVehicle() {
           />
       </div>
       <div>
-      <Button onClick={addVehicle}>Add Vehicle</Button>
+      <Button onClick={editVehicle}>Edit Vehicle</Button>
 
       </div>
       <br/>

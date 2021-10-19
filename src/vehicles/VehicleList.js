@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import config from "../config.js"
 import MaterialTable from 'material-table'
 import styled from 'styled-components'
-
 const url = config.EXPRESS_API_URL
 
 const Button = styled.button`
